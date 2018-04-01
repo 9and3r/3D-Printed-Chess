@@ -8,12 +8,12 @@ class GameManager:
     letter_to_position = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
     letters_positions = {'0': 'a', '1': 'b', '2': 'c', '3': 'd', '4': 'e', '5': 'f', '6': 'g', '7': 'h'}
 
-    def __init__(self, arduino_manager, player1, player2):
-        self.arduino = arduino_manager
+    def __init__(self, board_manager, player1, player2):
+        self.board_manager = board_manager
         self.game_running = False
         self.current_player = 'w'
-        player1.set_params(self, 'w')
-        player2.set_params(self, 'b')
+        player1.set_params(self, board_manager, 'w')
+        player2.set_params(self, board_manager, 'b')
         self.game = Game()
         self.players = {'w': player1, 'b': player2}
 
@@ -40,26 +40,26 @@ class GameManager:
         self.game_running = False
 
     def wait_for_differences_in_board(self):
-        initial_board_state = self.arduino.get_current_board_status()
-        while initial_board_state == self.arduino.get_current_board_status():
+        initial_board_state = self.board_manager.get_current_board_status()
+        while initial_board_state == self.board_manager.get_current_board_status():
             time.sleep(0.05)
         return initial_board_state
 
     def wait_and_show_errors(self, target_board):
-        while target_board != self.arduino.get_current_board_status() and self.game_running:
-            positions = self.get_changed_positions(target_board, self.arduino.get_current_board_status())
-            self.arduino.show_error_positions(GameManager.int_positions_to_coordinates(positions))
+        while target_board != self.board_manager.get_current_board_status() and self.game_running:
+            positions = self.get_changed_positions(target_board, self.board_manager.get_current_board_status())
+            self.board_manager.show_error_positions(GameManager.int_positions_to_coordinates(positions))
             time.sleep(0.05)
 
     # waits until the board goes to one of the possible boards or returns to the previous_board_state
     # it returns the key of the possible board that matches the current status
     #  Returns false if the board has changed to previous_board_state
     def wait_for_board_to_change_to(self, possible_boards, previous_board_state):
-        initial_board_state = self.arduino.get_current_board_status()
+        initial_board_state = self.board_manager.get_current_board_status()
         finish = False
         found = False
         while not finish and self.game_running:
-            new_board_state = self.arduino.get_current_board_status()
+            new_board_state = self.board_manager.get_current_board_status()
             for key in possible_boards:
                 if possible_boards[key] == new_board_state:
                     found = key

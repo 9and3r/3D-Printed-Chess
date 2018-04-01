@@ -1,10 +1,11 @@
 import tkinter as tk
 import threading
 import time
+from main.board_manager.base_board_manager import BaseBoardManager
 from main.game_manager import GameManager
 
 
-class ArduinoManagerDebug():
+class BoardManagerDebugUI(BaseBoardManager):
 
     def __init__(self):
         self.lock = threading.Lock()

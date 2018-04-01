@@ -1,7 +1,7 @@
 from main.game_manager import GameManager
-from debug.arduino_manager_debug_ui import ArduinoManagerDebug
+from debug.board_manager_debug_ui import BoardManagerDebugUI
 from main.players.human_player import HumanPlayer
-manager = ArduinoManagerDebug()
+manager = BoardManagerDebugUI()
 
 game_manager = GameManager(manager, HumanPlayer(), HumanPlayer())
 game_manager.start_game()

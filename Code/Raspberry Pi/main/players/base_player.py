@@ -4,9 +4,10 @@ class BasePlayer:
         self.color = 'w'
         self.game_manager = None
 
-    def set_params(self, game_manager, color):
+    def set_params(self, game_manager, board_manager, color):
         self.color = color
         self.game_manager = game_manager
+        self.board_manager = board_manager
 
     def get_player_name(self):
         raise NotImplementedError('This method should be implemented')
