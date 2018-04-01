@@ -1,7 +1,10 @@
-
+from game_manager import GameManager
 from arduino_manager_debug_ui import ArduinoManagerDebug
 manager = ArduinoManagerDebug()
-manager.mainloop()
+
+game_manager = GameManager(manager)
+game_manager.start_game()
+
 
 from game import Game
 
