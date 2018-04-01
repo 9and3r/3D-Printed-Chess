@@ -1,12 +1,13 @@
-from game_manager import GameManager
-from arduino_manager_debug_ui import ArduinoManagerDebug
+from main.game_manager import GameManager
+from debug.arduino_manager_debug_ui import ArduinoManagerDebug
+from main.players.human_player import HumanPlayer
 manager = ArduinoManagerDebug()
 
-game_manager = GameManager(manager)
+game_manager = GameManager(manager, HumanPlayer(), HumanPlayer())
 game_manager.start_game()
 
 
-from game import Game
+from chessnut.game import Game
 
 chessgame = Game()
 print(chessgame)

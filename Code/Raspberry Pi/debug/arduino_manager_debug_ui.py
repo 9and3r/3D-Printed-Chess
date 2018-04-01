@@ -1,7 +1,7 @@
 import tkinter as tk
 import threading
 import time
-from game_manager import GameManager
+from main.game_manager import GameManager
 
 
 class ArduinoManagerDebug():

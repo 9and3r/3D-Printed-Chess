@@ -1,5 +1,5 @@
 import time
-from game import Game
+from chessnut.game import Game
 
 
 class GameManager:
@@ -8,11 +8,14 @@ class GameManager:
     letter_to_position = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
     letters_positions = {'0': 'a', '1': 'b', '2': 'c', '3': 'd', '4': 'e', '5': 'f', '6': 'g', '7': 'h'}
 
-    def __init__(self, arduino_manager):
+    def __init__(self, arduino_manager, player1, player2):
         self.arduino = arduino_manager
         self.game_running = False
         self.current_player = 'w'
+        player1.set_params(self, 'w')
+        player2.set_params(self, 'b')
         self.game = Game()
+        self.players = {'w': player1, 'b': player2}
 
     def start_game(self):
         self.game.reset()
@@ -25,7 +28,7 @@ class GameManager:
 
             # Make next move
             if self.game_running:
-                self.make_next_move_human_player(self.current_player)
+                self.players[self.current_player].make_next_move()
 
             # Change player
             if self.current_player == 'w':
@@ -69,51 +72,6 @@ class GameManager:
         return found
 
 
-    def make_next_move_human_player(self, player):
-
-        # Show possible moves
-        self.arduino.show_possible_pieces(self.game.get_moves(player=player))
-
-        # Esperar a que se levante una pieza
-        initial_board_status = self.wait_for_differences_in_board()
-
-        # Calcular las posiciones que han cambiado
-        current_board_status = self.arduino.get_current_board_status()
-        positions = GameManager.get_changed_positions(initial_board_status, current_board_status)
-
-        # Comprobar que solo ha cambiado una posicion
-        if len(positions) == 1:
-
-            player = self.game.board.get_owner(positions[0])
-            possible_moves = self.game.get_moves(idx_list=[positions[0]])
-            if self.game.board.get_owner(positions[0]) == player and len(possible_moves) > 0:
-                # Find posible moves
-                # Si la pieza es correcta mostrar los posibles movimientos
-                self.arduino.show_posible_moves(possible_moves)
-
-                # Calculate valid boards
-                valid_boards = {}
-                for possible_move in possible_moves:
-                    array = list(current_board_status)
-                    array[GameManager.coordinate_to_int(possible_move[2:4])] = player
-                    valid_boards[possible_move]= (''.join(array))
-
-                # Esperar a que se realize el movimiento
-                move = self.wait_for_board_to_change_to(valid_boards, initial_board_status)
-                if self.game_running:
-                    if move:
-                        self.game.apply_move(move)
-                    else:
-                        # Hemos vuelto a la posicion inicial. Volver a intentar
-                        self.make_next_move_human_player(player)
-
-                # Añadir el movimiento al juego si es valido que se actualice
-            else:
-                self.arduino.show_error_positions(GameManager.int_positions_to_coordinates(positions))
-        else:
-            # Esperar a que el board este en modo correcto y volver a intentar
-            self.wait_for_differences_in_board()
-            self.make_next_move_human_player(player)
 
     def get_board_as_bw_string(self):
         current_board = ""
