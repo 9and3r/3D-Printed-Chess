@@ -3,6 +3,7 @@ class BasePlayer:
     def __init__(self):
         self.color = 'w'
         self.game_manager = None
+        self.board_manager = None
 
     def set_params(self, game_manager, board_manager, color):
         self.color = color

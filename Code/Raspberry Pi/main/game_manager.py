@@ -54,8 +54,7 @@ class GameManager:
     # waits until the board goes to one of the possible boards or returns to the previous_board_state
     # it returns the key of the possible board that matches the current status
     #  Returns false if the board has changed to previous_board_state
-    def wait_for_board_to_change_to(self, possible_boards, previous_board_state):
-        initial_board_state = self.board_manager.get_current_board_status()
+    def wait_for_board_to_change_to(self, possible_boards, previous_board_state = None):
         finish = False
         found = False
         while not finish and self.game_running:
@@ -65,13 +64,11 @@ class GameManager:
                     found = key
                     finish = True
             if not found:
-                if new_board_state == previous_board_state:
+                if previous_board_state is not None and new_board_state == previous_board_state:
                     finish = True
                 else:
                     time.sleep(0.05)
         return found
-
-
 
     def get_board_as_bw_string(self):
         current_board = ""

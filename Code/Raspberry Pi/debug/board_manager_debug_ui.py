@@ -10,27 +10,42 @@ class BoardManagerDebugUI(BaseBoardManager):
     def __init__(self):
         self.lock = threading.Lock()
         self.board_data_string = "bbbbbbbbbbbbbbbb--------------------------------wwwwwwwwwwwwwwww"
+
+    def start(self, game_manager):
+        self.game_manager = game_manager
         thread = threading.Thread(target=self.init_ui, args=())
         thread.start()
         time.sleep(1)
 
     def init_ui(self):
         self.main_window = tk.Tk()
-        self.main_window.title("Chess Board")
+        self.main_window.title("Board input/output")
+        self.main_window.geometry('+%d+%d' % (150, 100))
+
+        self.secondary_window = tk.Tk()
+        self.secondary_window.title("Board status")
+        self.secondary_window.geometry('+%d+%d' % (600, 100))
+
         self.tiles = {}
         self.tileColors = {}
         self.board_data = list(self.board_data_string)
+
+        self.tiles2 = []
 
         for i in range(0, 8):
             self.tiles[GameManager.letters_array[i]] = {}
             self.tileColors[GameManager.letters_array[i]] = {}
             for z in range(0, 8):
-                tile = self.combo = tk.Button(self.main_window, width=2)
+                tile = tk.Label(self.main_window, width=6, height=3)
                 tile.bind('<Button-1>', self.buttonClick)
                 tile.bind('<Button-2>', self.buttonClick)
                 tile.bind('<Button-3>', self.buttonClick)
                 tile.grid(row=z, column=i, sticky="nsew", padx=1, pady=1)
                 tile.board_position = (z * 8) + i
+
+                tile2 = tk.Label(self.secondary_window, width=6, height=3)
+                tile2.grid(row=i, column=z, sticky="nsew", padx=1, pady=1)
+                self.tiles2.append(tile2)
 
                 self.tiles[GameManager.letters_array[i]][str(8 - z)] = tile
                 self.tileColors[GameManager.letters_array[i]][str(8 - z)] = "gray"
@@ -63,6 +78,16 @@ class BoardManagerDebugUI(BaseBoardManager):
                 key2 = move[3:4]
                 self.tileColors[key1][key2] = "green"
 
+    def show_AI_move(self, move):
+        with self.lock:
+            self.clear_board()
+            start_key1 = move[0:1]
+            start_key2 = move[1:2]
+            target_key1 = move[2:3]
+            target_key2 = move[3:4]
+            self.tileColors[start_key1][start_key2] = "blue"
+            self.tileColors[target_key1][target_key2] = "green"
+
     def show_error_positions(self, errors):
         with self.lock:
             self.clear_board()
@@ -83,6 +108,20 @@ class BoardManagerDebugUI(BaseBoardManager):
                     for key2 in self.tileColors[key1]:
                         self.tiles[key1][key2].configure(background=self.tileColors[key1][key2])
             self.main_window.update()
+            self.secondary_window.update()
+
+            positions = self.game_manager.game.board._position
+            i = 0
+            for tile in self.tiles2:
+                text = positions[i]
+                if len(text.strip()) == 0:
+                    tile.configure(background="gray")
+                elif text.isupper():
+                    tile.configure(background="white", foreground="black")
+                else:
+                    tile.configure(background="black", foreground="white")
+                tile.configure(text=text)
+                i += 1
 
     def clear_board(self):
         for key1 in self.tileColors:
