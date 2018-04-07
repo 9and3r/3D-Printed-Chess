@@ -45,7 +45,7 @@ class HumanPlayer(BasePlayer):
                     if move:
 
                         # A valid move was detected. Apply that move
-                        self.game_manager.game.apply_move(move)
+                        self.game_manager.confirm_move(move)
                     else:
                         # Hemos vuelto a la posicion inicial. Volver a intentar
                         self.make_next_move()

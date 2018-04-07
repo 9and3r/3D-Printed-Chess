@@ -8,36 +8,53 @@ class GameManager:
     letter_to_position = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
     letters_positions = {'0': 'a', '1': 'b', '2': 'c', '3': 'd', '4': 'e', '5': 'f', '6': 'g', '7': 'h'}
 
-    def __init__(self, board_manager, player1, player2):
+    def __init__(self, board_manager):
         self.board_manager = board_manager
         self.game_running = False
-        self.current_player = 'w'
-        player1.set_params(self, board_manager, 'w')
-        player2.set_params(self, board_manager, 'b')
+        self.players = None
+        self.current_player = None
         self.game = Game()
-        self.players = {'w': player1, 'b': player2}
 
-    def start_game(self):
+    def new_game(self, player1, player2):
+        self.players = {'w': player1, 'b': player2}
+        player1.set_params(self, self.board_manager, 'w')
+        player2.set_params(self, self.board_manager, 'b')
+        self.current_player = 'w'
+        self.__start_game()
+
+    def __start_game(self):
         self.game.reset()
         self.game_running = True
         self.current_player = 'w'
         while self.game_running:
 
-            # Wait to set initial positions
-            self.wait_and_show_errors(self.get_board_as_bw_string())
+            # Reset board indicators
+            self.board_manager.clear_board()
 
-            # Make next move
-            if self.game_running:
-                self.players[self.current_player].make_next_move()
-
-            # Change player
-            if self.current_player == 'w':
-                self.current_player = 'b'
+            # Check if the game finished
+            if self.game.status == Game.CHECKMATE or self.game.status == Game.STALEMATE:
+                # Game finished
+                print("Game finished")
+                self.stop_game()
             else:
-                self.current_player = 'w'
+                # Wait until the board is in the expected state
+                self.wait_and_show_errors(self.get_board_as_bw_string())
+
+                # Make next move
+                if self.game_running:
+                    self.players[self.current_player].make_next_move()
+
+                    # Change player
+                    if self.current_player == 'w':
+                        self.current_player = 'b'
+                    else:
+                        self.current_player = 'w'
 
     def stop_game(self):
         self.game_running = False
+
+    def confirm_move(self, move):
+        self.game.apply_move(move)
 
     def wait_for_differences_in_board(self):
         initial_board_state = self.board_manager.get_current_board_status()
@@ -54,7 +71,7 @@ class GameManager:
     # waits until the board goes to one of the possible boards or returns to the previous_board_state
     # it returns the key of the possible board that matches the current status
     #  Returns false if the board has changed to previous_board_state
-    def wait_for_board_to_change_to(self, possible_boards, previous_board_state = None):
+    def wait_for_board_to_change_to(self, possible_boards, previous_board_state=None):
         finish = False
         found = False
         while not finish and self.game_running:

@@ -74,6 +74,7 @@ class BoardManagerDebugUI(BaseBoardManager):
         with self.lock:
             self.clear_board()
             for move in moves:
+                self.tileColors[move[0:1]][move[1:2]] = "blue"
                 key1 = move[2:3]
                 key2 = move[3:4]
                 self.tileColors[key1][key2] = "green"
@@ -87,6 +88,10 @@ class BoardManagerDebugUI(BaseBoardManager):
             target_key2 = move[3:4]
             self.tileColors[start_key1][start_key2] = "blue"
             self.tileColors[target_key1][target_key2] = "green"
+
+    def show_AI_thinking(self):
+        with self.lock:
+            self.clear_board()
 
     def show_error_positions(self, errors):
         with self.lock:
@@ -129,11 +134,6 @@ class BoardManagerDebugUI(BaseBoardManager):
                 self.tileColors[key1][key2]="gray"
 
     def buttonClick(self, event):
-        for key1 in self.tiles:
-            for key2 in self.tiles[key1]:
-                if self.tiles[key1][key2] == event.widget:
-                    print(key1 + key2)
-
         with self.lock:
             if event.num == 1:
                 text = "w"

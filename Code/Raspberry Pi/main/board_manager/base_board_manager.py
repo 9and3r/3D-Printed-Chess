@@ -17,3 +17,6 @@ class BaseBoardManager():
 
     def show_AI_move(self, move):
         raise NotImplementedError('This method should be implemented')
+
+    def show_AI_thinking(self):
+        raise NotImplementedError('This method should be implemented')
