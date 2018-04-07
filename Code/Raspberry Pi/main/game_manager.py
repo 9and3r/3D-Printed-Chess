@@ -1,32 +1,42 @@
 import time
+from threading import Thread
 from chessnut.game import Game
 
 
 class GameManager:
 
+    instance = None
+
     letters_array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     letter_to_position = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
     letters_positions = {'0': 'a', '1': 'b', '2': 'c', '3': 'd', '4': 'e', '5': 'f', '6': 'g', '7': 'h'}
 
-    def __init__(self, board_manager):
+    def __init__(self, board_manager, menu_manager):
+        GameManager.instance = self
         self.board_manager = board_manager
         self.game_running = False
         self.players = None
         self.current_player = None
         self.game = Game()
+        self.menu_manager = menu_manager
 
     def new_game(self, player1, player2):
         self.players = {'w': player1, 'b': player2}
         player1.set_params(self, self.board_manager, 'w')
         player2.set_params(self, self.board_manager, 'b')
         self.current_player = 'w'
-        self.__start_game()
+        t = Thread(target=self.__start_game)
+        t.start()
 
     def __start_game(self):
+        self.menu_manager.set_game_running(self, True)
         self.game.reset()
         self.game_running = True
         self.current_player = 'w'
         while self.game_running:
+
+            # Tell the display that turn changed
+            self.menu_manager.instance.game_status_changed(self.current_player)
 
             # Reset board indicators
             self.board_manager.clear_board()
@@ -49,6 +59,9 @@ class GameManager:
                         self.current_player = 'b'
                     else:
                         self.current_player = 'w'
+
+        # Notify that game finished
+        self.menu_manager.set_game_running(self, False)
 
     def stop_game(self):
         self.game_running = False

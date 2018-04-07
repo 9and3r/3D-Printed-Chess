@@ -1,13 +1,17 @@
 from main.menu.main_menu import MainMenu
+from main.menu.game_running_menu import GameRunningMenu
 
 class MenuManager:
 
-    def __init__(self, display_manager, game_manager):
+    instance = None
+
+    def __init__(self, display_manager):
+        MenuManager.instance = self
         self.display_manager = display_manager
-        self.game_manager = game_manager
-        self.menu = MainMenu()
+        self.menu = None
 
     def start(self):
+        self.menu = MainMenu()
         self.update_display()
 
     def update_display(self):
@@ -27,6 +31,13 @@ class MenuManager:
         self.menu.select()
         self.update_display()
 
+    def set_game_running(self, game_manager, running):
+        if running:
+            self.menu = GameRunningMenu(game_manager)
+        else:
+            self.menu = MainMenu()
+        self.update_display()
 
-
-
+    def game_status_changed(self, player):
+        self.menu.game_changed(player)
+        self.update_display()
