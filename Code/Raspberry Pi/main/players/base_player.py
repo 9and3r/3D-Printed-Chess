@@ -15,3 +15,9 @@ class BasePlayer:
 
     def make_next_move(self):
         raise NotImplementedError('This method should be implemented')
+
+    def get_configuration_options(self):
+        raise NotImplementedError('This method should be implemented')
+
+    def configure_option(self, option_id, value):
+        raise NotImplementedError('This method should be implemented')

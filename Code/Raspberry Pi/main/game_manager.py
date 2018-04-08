@@ -33,6 +33,7 @@ class GameManager:
         self.game.reset()
         self.game_running = True
         self.current_player = 'w'
+        game_finished_correctly = False
         while self.game_running:
 
             # Tell the display that turn changed
@@ -45,6 +46,8 @@ class GameManager:
             if self.game.status == Game.CHECKMATE or self.game.status == Game.STALEMATE:
                 # Game finished
                 print("Game finished")
+                game_finished_correctly = True
+                self.menu_manager.instance.game_finished(self.current_player, self.game.status)
                 self.stop_game()
             else:
                 # Wait until the board is in the expected state
@@ -61,7 +64,9 @@ class GameManager:
                         self.current_player = 'w'
 
         # Notify that game finished
-        self.menu_manager.set_game_running(self, False)
+        if not game_finished_correctly:
+            self.menu_manager.set_game_running(self, False)
+        self.board_manager.standby()
 
     def stop_game(self):
         self.game_running = False
@@ -71,7 +76,7 @@ class GameManager:
 
     def wait_for_differences_in_board(self):
         initial_board_state = self.board_manager.get_current_board_status()
-        while initial_board_state == self.board_manager.get_current_board_status():
+        while initial_board_state == self.board_manager.get_current_board_status() and self.game_running:
             time.sleep(0.05)
         return initial_board_state
 

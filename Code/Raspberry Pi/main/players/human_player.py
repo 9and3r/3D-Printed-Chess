@@ -7,6 +7,9 @@ class HumanPlayer(BasePlayer):
     def get_player_name(self):
         return "Human"
 
+    def get_configuration_options(self):
+        return []
+
     def make_next_move(self):
         # Show possible moves
         self.board_manager.show_possible_pieces(self.game_manager.game.get_moves(player=self.color))
@@ -46,14 +49,14 @@ class HumanPlayer(BasePlayer):
 
                         # A valid move was detected. Apply that move
                         self.game_manager.confirm_move(move)
-                    else:
+                    elif self.game_manager.game_running:
                         # Hemos vuelto a la posicion inicial. Volver a intentar
                         self.make_next_move()
             else:
                 self.board_manager.show_error_positions(GameManager.int_positions_to_coordinates(positions))
                 # todo esperar a que el board este en el estado esperado
                 self.make_next_move()
-        else:
+        elif self.game_manager.game_running:
             # Wait until the board is on this turin initial position and try again
             self.game_manager.wait_for_differences_in_board()
             self.make_next_move()

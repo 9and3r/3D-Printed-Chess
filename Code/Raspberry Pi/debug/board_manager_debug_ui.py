@@ -8,6 +8,7 @@ from main.game_manager import GameManager
 class BoardManagerDebugUI(BaseBoardManager):
 
     def __init__(self):
+        BaseBoardManager.__init__(self)
         self.lock = threading.Lock()
         self.board_data_string = "bbbbbbbbbbbbbbbb--------------------------------wwwwwwwwwwwwwwww"
 
@@ -132,6 +133,9 @@ class BoardManagerDebugUI(BaseBoardManager):
         for key1 in self.tileColors:
             for key2 in self.tileColors[key1]:
                 self.tileColors[key1][key2]="gray"
+
+    def standby(self):
+        self.clear_board()
 
     def buttonClick(self, event):
         with self.lock:

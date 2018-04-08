@@ -65,7 +65,7 @@ class SubMenu:
                 self.elements[self.current_pos].on_enter_submenu()
                 self.in_submenu = True
             else:
-                self.on_select_element(self.current_pos, self.elements[self.current_pos])
+                self.on_select_element(self.current_pos - 1, self.elements[self.current_pos])
 
     def exit_submenu(self):
         self.in_submenu = False

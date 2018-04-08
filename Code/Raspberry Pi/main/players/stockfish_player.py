@@ -34,6 +34,22 @@ class StockfishPlayer(BasePlayer):
     def get_player_name(self):
         return "Stockfish"
 
+    def get_configuration_options(self):
+        return [
+            {"id":1, "name": "Difficulty", "values": [
+                {"value": 0, "name": "Very easy"},
+                {"value": 2, "name": "Easy"},
+                {"value": 5, "name": "Medium"},
+                {"value": 8, "name": "Hard"},
+                {"value": 12, "name": "Expert"},
+                {"value": 20, "name": "Impossible"},
+            ]},
+        ]
+
+    def configure_option(self, option_id, value):
+        if option_id == 1:
+            self.send_command('setoption name Skill Level value ' + str(value))
+
     def make_next_move(self):
 
         self.board_manager.show_AI_thinking()
@@ -43,7 +59,7 @@ class StockfishPlayer(BasePlayer):
         self.send_command('position fen ' + fen)
 
         # Tell Stockfish to think it's next move
-        self.send_command('go movetime 500')
+        self.send_command('go depth 1')
 
         # Get Stockfish desired move
         move = StockfishPlayer.get_best_move(self.read_until('bestmove'))
