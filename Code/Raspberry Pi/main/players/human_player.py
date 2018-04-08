@@ -7,9 +7,6 @@ class HumanPlayer(BasePlayer):
     def get_player_name(self):
         return "Human"
 
-    def get_configuration_options(self):
-        return []
-
     def make_next_move(self):
         # Show possible moves
         self.board_manager.show_possible_pieces(self.game_manager.game.get_moves(player=self.color))

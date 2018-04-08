@@ -59,7 +59,7 @@ class StockfishPlayer(BasePlayer):
         self.send_command('position fen ' + fen)
 
         # Tell Stockfish to think it's next move
-        self.send_command('go depth 1')
+        self.send_command('go')
 
         # Get Stockfish desired move
         move = StockfishPlayer.get_best_move(self.read_until('bestmove'))
