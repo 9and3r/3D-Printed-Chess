@@ -1,6 +1,6 @@
 # WORK IN PROGRESS
 # 3D Printed Chess
-This project is to make a home made electronic chess board.
+This project is to make a home made electronic chessboard.
 
 **Features**
 - Pieces movements are detected automatically
