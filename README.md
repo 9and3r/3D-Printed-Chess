@@ -1,6 +1,6 @@
 # WORK IN PROGRESS
 # 3D Printed Chess
-This project is to make a home made electronic chessboard.
+This repository contains the info and software to build a home made electronic chessboard.
 
 **Features**
 - Pieces movements are detected automatically
@@ -8,7 +8,7 @@ This project is to make a home made electronic chessboard.
 - [Stockfish](https://stockfishchess.org/) used as chess engine
 
 ## General design
-The board is designed to be 3D printed. The pieces are also 3D printed and each one has a magnet atached on the bottom. Each cell of the board has a magnetic sensor and a RGB led. The sensors and the leds are controled by the Arduino Nano. The Arduino Nano is connected using the USB cable to the Raspberry Pi and they cominucate using Serial messages. The Raspberry Pi is running the main program.
+The board is designed to be 3D printed. The pieces are also 3D printed and each one has a magnet atached on the bottom. Each cell of the board has a magnetic sensor and a RGB led. The sensors and the leds are controled by the Arduino Nano. The Arduino Nano is connected using the USB cable to the Raspberry Pi and they comunicate using Serial messages. The Raspberry Pi is running the main program.
 
 ## Software
 
