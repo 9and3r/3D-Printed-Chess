@@ -23,7 +23,7 @@ This is the main material used to make this project. You should be able to repla
 - **1 x Micro SD card** Estimated price 10€
 - **1 x 5 volt 2 amp power supply for the leds** Estimated price 12€
 - **1 x 16x2 characters HD44780 LCD and I2C adapter** Estimated price 2€
-- **3 x buttons or 1 x rotary encoder with push button** 
+- **3 x buttons** 
 
 **Total estimated price: 97.60€**
 The estimated price can be lowered if you already have some of the materials already. For example, It is usual to have a Micro SD card and phone charges that can be used to power the leds and the Raspberry Pi, lowering the price to **63.60€**.
