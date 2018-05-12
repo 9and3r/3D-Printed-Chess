@@ -18,15 +18,14 @@ This is the main material used to make this project. You should be able to repla
 - **4 x CD74HC4067** Estimated price 6.5€/4 unit. [Buy](https://aliexpress.com/item/1pcs-CD74HC4067-16-Channel-Analog-Digital-Multiplexer-Breakout-Board-Module-For-Arduino/32729631800.html)
 - **32 x Neodimiun magnets** Estimated price 3.70€/50 units. [Buy](https://aliexpress.com/item/50pcs-12x2mm-Super-Strong-magnet-Round-Disc-Rare-Earth-Neodymium-magnets-D12-2mm-NEW-Art-Craft/32851739554.html)
 - **1 x Arduino nano + Usb cable**. Estimated price 3€
-- **1 x Raspberry Pi 3+** Estimated price 35€
-- **1 x Raspberry Pi power adapter** Estimated price 12€
+- **1 x Raspberry Pi Zero W** Estimated price 10€
 - **1 x Micro SD card** Estimated price 10€
-- **1 x 5 volt 2 amp power supply for the leds** Estimated price 12€
+- **1 x Power adapter with two 5v2amps outputs** Estimated price 11€
 - **1 x 16x2 characters HD44780 LCD and I2C adapter** Estimated price 2€
 - **3 x buttons** 
 
-**Total estimated price: 97.60€**
-The estimated price can be lowered if you already have some of the materials already. For example, It is usual to have a Micro SD card and phone charges that can be used to power the leds and the Raspberry Pi, lowering the price to **63.60€**.
+**Total estimated price: 62.20€**
+The estimated price can be lowered if you already have some of the materials already. For example, It is usual to have a Micro SD card and phone charges that can be used to power the leds and the Raspberry Pi, lowering the price to **41.20€**.
 
 ## Power supply
 The Raspberry Pi should be powered using a good 5v power adapter with enough amperage. You can use the official one to avoid problems. The arduino nano is connected to the Raspberry Pi Usb port and it will get the power directly from the Raspberry Pi.
